@@ -1,8 +1,9 @@
-import {Children, createContext, useContext} from 'react';
+import {createContext, useContext, useMemo} from 'react';
 import {io} from 'socket.io-client';
 
 
 const SocketContext = createContext();
+export const useSocket = () => useContext(SocketContext);
 
 export const SocketContextProvider = ({children}) => {
     const socket = useMemo(() => {
@@ -17,4 +18,4 @@ export const SocketContextProvider = ({children}) => {
         </SocketContext.Provider>
     )
 }
-export const useSocket = () => useContext(SocketContext);
+
