@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSocket } from "../../context/Socket";
 import { usePeer } from "../../context/Peer";
+import ReactPlayer from 'react-player';
 export default function Lobby() {
   const { socket } = useSocket();
   const {peer, createOffer, createAnswer, setRemoteAnswer} = usePeer();
+  const[myStream, setMyStream] = useState(null);
 
   const handleUserJoined = useCallback(async({email}) => {
         console.log(`User: ${email} joined the room!`);
@@ -22,6 +24,11 @@ export default function Lobby() {
     console.log("Call got accepted", answer)
   }, [setRemoteAnswer])
 
+  const getUserMediaStream = useCallback(async() => {
+    const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+    setMyStream(stream);
+  })
+
   useEffect(() => {
     socket.on("user-joined", handleUserJoined);
     socket.on('incomming-call', handleIncomingCall);
@@ -34,9 +41,14 @@ export default function Lobby() {
     }
   }, [socket, handleUserJoined, handleIncomingCall, handleCallAccepted]);
 
+  useEffect(() => {
+    getUserMediaStream();
+  }, [getUserMediaStream])
+
   return (
     <>
       <div>Lobby</div>
+      <ReactPlayer url={myStream} playing/>
     </>
   );
 }

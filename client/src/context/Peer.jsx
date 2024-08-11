@@ -34,7 +34,10 @@ export const PeerContextProvider = ({ children }) => {
     await peer.setRemoteDescription(answer);
   }
 
-  
+  const sendStream = async(stream) => {
+    const tracks = stream.getTracks();
+    
+  }
 
   return <PeerContext.Provider value={{peer, createOffer, createAnswer, setRemoteAnswer}}>{children}</PeerContext.Provider>;
 };
