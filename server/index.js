@@ -19,6 +19,7 @@ app.use(express.json({
 const emailToSocketMapping = new Map();
 
 io.on('connection', socket => {
+    console.log("Sockets connected")
     socket.on('join-room', (data) => {
         const{email, roomId} = data;
         console.log(`User: ${email} joined the room ${roomId}`);
