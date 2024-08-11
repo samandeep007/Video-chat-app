@@ -2,9 +2,12 @@ import { urlencoded } from 'express';
 import express from 'express';
 import { Server } from 'socket.io';
 import 'dotenv/config'
+import cors from 'cors';
 
 const app = express();
-const io = new Server();
+const io = new Server({
+    cors: true
+});
 
 app.use(urlencoded({
     limit: "16kb",
@@ -14,6 +17,11 @@ app.use(urlencoded({
 app.use(express.json({
     limit: "16kb",
     extended: true
+}))
+
+app.use(cors({
+    origin: "*",
+    credentials: true
 }))
 
 const emailToSocketMapping = new Map();
