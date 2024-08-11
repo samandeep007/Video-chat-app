@@ -4,8 +4,9 @@ import { usePeer } from "../../context/Peer";
 import ReactPlayer from 'react-player';
 export default function Lobby() {
   const { socket } = useSocket();
-  const {peer, createOffer, createAnswer, setRemoteAnswer} = usePeer();
+  const {peer, createOffer, createAnswer, setRemoteAnswer, sendStream} = usePeer();
   const[myStream, setMyStream] = useState(null);
+  const[remoteStream, setRemoteStream] = useState(null);
 
   const handleUserJoined = useCallback(async({email}) => {
         console.log(`User: ${email} joined the room!`);
@@ -26,6 +27,7 @@ export default function Lobby() {
 
   const getUserMediaStream = useCallback(async() => {
     const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+    await sendStream(stream);
     setMyStream(stream);
   })
 
