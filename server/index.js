@@ -25,18 +25,27 @@ app.use(cors({
 }))
 
 const emailToSocketMapping = new Map();
+const socketToEmailMapping = new Map();
 
 io.on('connection', socket => {
     
     console.log("Sockets connected")
 
-    socket.on('join-room', (data) => {
-        const { email, roomId } = data;
+    socket.on('join-room', ({email, roomId}) => {
         console.log(`User: ${email} joined the room ${roomId}`);
+        // Setting the maps
         emailToSocketMapping.set(email, socket.id);
+        socketToEmailMapping.set(socket.id, email)
+        //Joining the room
         socket.join(roomId);
         socket.emit("joined-room", {roomId})
         socket.broadcast.to(roomId).emit("user-joined", { email })
+    })
+
+    socket.on('call-user', ({email, offer}) => {
+        const socketId = emailToSocketMapping.get('email');
+        const fromEmail = socketToEmailMapping.get(socket.id);
+        socket.to(socketId).emit('incomming-call', {from:  fromEmail, offer});
     })
 })
 
