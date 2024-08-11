@@ -16,8 +16,16 @@ app.use(express.json({
     extended: true
 }))
 
+const emailToSocketMapping = new Map();
+
 io.on('connection', socket => {
-    
+    socket.on('join-room', (data) => {
+        console.log(`User: ${email} joined the room ${roomId}`);
+        emailToSocketMapping.set(email, socket.id);
+        const{email, roomId} = data;
+        socket.join(roomId);
+        socket.broadcast.to(roomId).emit("user-joined", {email})
+    })
 })
 
 const HTTP_PORT = process.env.HTTP_PORT || 3000;
