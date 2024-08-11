@@ -29,11 +29,12 @@ const emailToSocketMapping = new Map();
 io.on('connection', socket => {
     console.log("Sockets connected")
     socket.on('join-room', (data) => {
-        const{email, roomId} = data;
+        const { email, roomId } = data;
         console.log(`User: ${email} joined the room ${roomId}`);
         emailToSocketMapping.set(email, socket.id);
         socket.join(roomId);
-        socket.broadcast.to(roomId).emit("user-joined", {email})
+        socket.emit("joined-room", {roomId})
+        socket.broadcast.to(roomId).emit("user-joined", { email })
     })
 })
 

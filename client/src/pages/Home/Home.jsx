@@ -1,18 +1,20 @@
-import React, {useState} from 'react'
-import { ArrowRight } from 'lucide-react'
-import {useSocket} from '../../context/Socket'
+import React, { useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { useSocket } from "../../context/Socket";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const { socket } = useSocket();
 
-     const {socket} = useSocket();
+  const [email, setEmail] = useState("");
+  const [roomId, setRoomId] = useState("");
 
-    const[email, setEmail] = useState("");
-    const[roomId, setRoomId] = useState("");
+  const navigate = useNavigate();
 
-    const handleSubmit = () => {
-        socket.emit('join-room', {email, roomId})
-    }
-
+  const handleSubmit = () => {
+    socket.emit("join-room", { email, roomId });
+    navigate("/lobby");
+  };
 
   return (
     <section>
@@ -35,32 +37,38 @@ export default function Home() {
           <form action="#" method="POST" className="mt-8">
             <div className="space-y-5">
               <div>
-                <label htmlFor="" className="text-base font-medium text-gray-900">
-                  {' '}
-                  Email address{' '}
+                <label
+                  htmlFor=""
+                  className="text-base font-medium text-gray-900"
+                >
+                  {" "}
+                  Email address{" "}
                 </label>
                 <div className="mt-2">
                   <input
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                     type="email"
                     value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email"
                   ></input>
                 </div>
               </div>
               <div>
                 <div className="mt-2">
-                <label htmlFor="" className="text-base font-medium text-gray-900">
-                  {' '}
-                  Room ID{' '}
-                </label>
+                  <label
+                    htmlFor=""
+                    className="text-base font-medium text-gray-900"
+                  >
+                    {" "}
+                    Room ID{" "}
+                  </label>
                   <input
                     className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                     type="text"
                     placeholder="Room Id"
                     value={roomId}
-                    onChange={e => setRoomId(e.target.value)}
+                    onChange={(e) => setRoomId(e.target.value)}
                   ></input>
                 </div>
               </div>
@@ -78,5 +86,5 @@ export default function Home() {
         </div>
       </div>
     </section>
-  )
+  );
 }
