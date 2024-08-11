@@ -49,7 +49,7 @@ io.on('connection', socket => {
     })
 
     socket.on('call-accepted', ({email, answer}) => {
-        const socketId = emailToSocketMapping(email);
+        const socketId = emailToSocketMapping.get(email);
         socket.to(socketId).emit('call-accepted', {answer});
     })
 })
