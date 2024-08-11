@@ -43,7 +43,7 @@ io.on('connection', socket => {
     })
 
     socket.on('call-user', ({email, offer}) => {
-        const socketId = emailToSocketMapping.get('email');
+        const socketId = emailToSocketMapping.get(email);
         const fromEmail = socketToEmailMapping.get(socket.id);
         socket.to(socketId).emit('incomming-call', {from:  fromEmail, offer});
     })

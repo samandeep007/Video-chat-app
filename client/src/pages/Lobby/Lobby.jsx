@@ -12,7 +12,7 @@ export default function Lobby() {
   }, [socket, peer])
 
   const handleIncomingCall = ({from, offer}) => {
-    console.log("Incoming call from ", from);
+    console.log("Incoming call from ", offer);
   }
 
   useEffect(() => {

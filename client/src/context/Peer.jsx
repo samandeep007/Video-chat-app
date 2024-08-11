@@ -5,7 +5,7 @@ const PeerContext = createContext();
 export const usePeer = () => useContext(PeerContext);
 
 export const PeerContextProvider = ({ children }) => {
-  const peer = useMemo(() => {
+  const peer = useMemo(() => 
     new RTCPeerConnection({
       iceServers: [
         {
@@ -15,14 +15,13 @@ export const PeerContextProvider = ({ children }) => {
           ],
         },
       ],
-    });
-  });
+    }), []);
 
   const createOffer = async() => {
     const offer = await peer.createOffer();
-    await peer.setLocalDescription(local);
+    await peer.setLocalDescription(offer);
     return offer;
   }
 
-  return <PeerContext.Provider value={{peer}}>{children}</PeerContext.Provider>;
+  return <PeerContext.Provider value={{peer, createOffer}}>{children}</PeerContext.Provider>;
 };
