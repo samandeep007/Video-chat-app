@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { useSocket } from "../../context/Socket";
 import { useNavigate } from "react-router-dom";
@@ -13,8 +13,14 @@ export default function Home() {
 
   const handleSubmit = () => {
     socket.emit("join-room", { email, roomId });
-    navigate("/lobby");
   };
+
+  useEffect(() => {
+    socket.on("joined-room", ({ roomId }) => {
+      navigate(`/room/${roomId}`);
+    });
+  }, [socket]);
+
 
   return (
     <section>

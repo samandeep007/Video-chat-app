@@ -9,7 +9,7 @@ import Lobby from './pages/Lobby/Lobby.jsx'
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<App/>}>
     <Route path="" element={<Home/>}/>
-    <Route path="/lobby" element={<Lobby/>}/>
+    <Route path="/lobby/:id" element={<Lobby/>}/>
   </Route>
 ))
 
