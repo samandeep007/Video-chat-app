@@ -3,7 +3,7 @@ import { useSocket } from "../../context/Socket";
 import { usePeer } from "../../context/Peer";
 export default function Lobby() {
   const { socket } = useSocket();
-  const {peer, createOffer, createAnswer} = usePeer();
+  const {peer, createOffer, createAnswer, setRemoteAnswer} = usePeer();
 
   const handleUserJoined = useCallback(async({email}) => {
         console.log(`User: ${email} joined the room!`);
@@ -18,8 +18,9 @@ export default function Lobby() {
   }, [createAnswer, socket])
 
   const handleCallAccepted = useCallback(async({answer}) => {
-
-  }, [])
+    await setRemoteAnswer(answer);
+    console.log("Call got accepted", answer)
+  }, [setRemoteAnswer])
 
   useEffect(() => {
     socket.on("user-joined", handleUserJoined);
