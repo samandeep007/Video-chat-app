@@ -47,6 +47,11 @@ io.on('connection', socket => {
         const fromEmail = socketToEmailMapping.get(socket.id);
         socket.to(socketId).emit('incomming-call', {from:  fromEmail, offer});
     })
+
+    socket.on('call-accepted', ({email, answer}) => {
+        const socketId = emailToSocketMapping(email);
+        socket.to(socketId).emit('call-accepted', {answer});
+    })
 })
 
 const HTTP_PORT = process.env.HTTP_PORT || 3000;
