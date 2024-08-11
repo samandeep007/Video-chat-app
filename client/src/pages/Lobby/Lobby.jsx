@@ -11,21 +11,27 @@ export default function Lobby() {
         socket.emit('call-user', {email, offer});
   }, [socket, peer])
 
-  const handleIncomingCall = async({from, offer}) => {
+  const handleIncomingCall = useCallback(async({from, offer}) => {
     console.log("Incoming call from ", offer);
     const answer = await createAnswer(offer);
     socket.emit('call-accepted', {email: from, answer })
-  }
+  }, [createAnswer, socket])
+
+  const handleCallAccepted = useCallback(async({answer}) => {
+
+  }, [])
 
   useEffect(() => {
     socket.on("user-joined", handleUserJoined);
     socket.on('incomming-call', handleIncomingCall);
+    socket.on('call-accepted', handleCallAccepted);
 
     return () => {
         socket.off('user-joined', handleUserJoined);
         socket.off('incomming-call', handleIncomingCall);
+        socket.off('call-accepted', handleCallAccepted);
     }
-  }, [socket]);
+  }, [socket, handleUserJoined, handleIncomingCall, handleCallAccepted]);
 
   return (
     <>
