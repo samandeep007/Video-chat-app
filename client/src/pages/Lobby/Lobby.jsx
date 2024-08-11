@@ -18,6 +18,11 @@ export default function Lobby() {
   useEffect(() => {
     socket.on("user-joined", handleUserJoined);
     socket.on('incomming-call', handleIncomingCall);
+
+    return () => {
+        socket.off('user-joined', handleUserJoined);
+        socket.off('incomming-call', handleIncomingCall);
+    }
   }, [socket]);
 
   return (
