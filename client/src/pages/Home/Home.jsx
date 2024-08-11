@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ArrowRight } from "lucide-react";
 import { useSocket } from "../../context/Socket";
 import { useNavigate } from "react-router-dom";
@@ -15,10 +15,16 @@ export default function Home() {
     socket.emit("join-room", { email, roomId });
   };
 
+  const handleJoinRoom = useCallback(({roomId}) => {
+    navigate(`/room/${roomId}`);
+  }, [navigate])
+
   useEffect(() => {
-    socket.on("joined-room", ({ roomId }) => {
-      navigate(`/room/${roomId}`);
-    });
+    socket.on("joined-room", handleJoinRoom);
+
+    return () => {
+      socket.off("joined-room", handleJoinRoom)
+    }
   }, [socket]);
 
 
